@@ -33,6 +33,13 @@
 import os
 import subprocess
 
+'''
+通过Popen创建一个子进程, 其中子进程:
+- stdin:  
+- stdout: 
+@TODO: PIPE作为stdin/stdout时， 对PIPE生成的r_fd/w_fd理解的还是不够深。得专门看下PIPE的知识，再看这部分内容。
+'''
+
 def run_encrypt(data):
     env = os.environ.copy()
     env["password"] = "zf7ShyBhZOraQDdE/FiZpm/m/8f9X+M1"
@@ -42,6 +49,7 @@ def run_encrypt(data):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
     )
+    print(f'fd_id in parent: {proc.stdin.fileno()}')
     proc.stdin.write(data)
     proc.stdin.flush()  
     return proc
@@ -56,7 +64,7 @@ def run_hash(input_stdin):
 encrypt_procs = []
 hash_procs = []
 
-for _ in range(3):
+for _ in range(1):
     data = os.urandom(10)
     
     encrypt_proc = run_encrypt(data)
@@ -64,9 +72,8 @@ for _ in range(3):
     
     # aa = encrypt_proc.stdout.fileno()
     # print(f'aa: {aa}')
-    time.sleep(1)
-    encrypt_proc.stdout.close()
-    encrypt_proc.stdout = None
+    # encrypt_proc.stdout.close()
+    # encrypt_proc.stdout = None
     
     
     # hash_proc = run_hash(encrypt_proc.stdout)
@@ -77,24 +84,24 @@ for _ in range(3):
 import os
 import time 
 
-for proc in encrypt_procs:
-    res,_ = proc.communicate()
-    print(f'res: {res}')
-    assert proc.returncode == 0
+# for proc in encrypt_procs:
+#     res,_ = proc.communicate()
+#     print(f'res: {res}')
+#     assert proc.returncode == 0
     
 # for proc in hash_procs:
 #     out, _ = proc.communicate()
 #     print(out[-10:])
 #     assert proc.returncode == 0
 
-# while True:
-#     print("*" * 20)
-#     print(f"PID {os.getpid()} ")
-#     for proc in encrypt_procs:
-#         print(f"encrypt-PID {proc.pid} ")
+while True:
+    print("*" * 20)
+    print(f"PID {os.getpid()} ")
+    for proc in encrypt_procs:
+        print(f"encrypt-PID {proc.pid} ")
     
-#     # for proc in hash_procs:
-#     #     print(f"hash-PID {proc.pid} ")
+    # for proc in hash_procs:
+    #     print(f"hash-PID {proc.pid} ")
     
-#     print("*" * 20)
-#     time.sleep(20)
+    print("*" * 20)
+    time.sleep(20)
