@@ -1,5 +1,5 @@
 # 背景
-早、中、晚经常会有些空闲时间，计划利用这些空闲时间逐个学习、练习Effective Python中的125个Items，看1个月是否能通关。
+早、中、晚经常会有些空闲时间，计划利用这些空闲时间逐个学习、练习Effective Python中的125个Items。
 
 
 # 作者 Brett Slatkin
